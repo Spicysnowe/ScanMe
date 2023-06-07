@@ -97,6 +97,16 @@
             android:layout_height="wrap_content"/>
 
 
+        <Button
+            android:id="@+id/logOutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log out"
+            android:layout_gravity="center"
+            android:onClick="logout"
+            />
+
+
     </LinearLayout>
 
 

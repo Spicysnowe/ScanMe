@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
@@ -73,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
         imageIv = findViewById(R.id.imageiv);
         scanbtn = findViewById(R.id.scanBtn);
         resultTV = findViewById(R.id.resultTV);
+
+
+
 
         //initialize the arrays of permissions required to pick image from gallery
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE };//image from camera: Camera and write_ext_storage permission
@@ -380,5 +384,16 @@ public class MainActivity extends AppCompatActivity {
             }
             break;
         }
+    }
+
+    public void logout(View view) {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(getApplicationContext(),SigninActivity.class));
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 }

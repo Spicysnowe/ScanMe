@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1081074714564",
+    "project_id": "scanme-2a4fe",
+    "storage_bucket": "scanme-2a4fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081074714564:android:e35149fba131a22b260691",
+        "android_client_info": {
+          "package_name": "com.techtastic.scanme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081074714564-4i469klgm1vf5pf75uuok4n27egj2ifh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWPhkPZ_NrbOZyGJO8mS-5oWhv5mPk8ck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081074714564-4i469klgm1vf5pf75uuok4n27egj2ifh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
