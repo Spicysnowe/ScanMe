@@ -32,13 +32,19 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton cameraBtn, galleryBtn, scanbtn;
     private ImageView imageIv,scanline;
     private TextView resultTV;
+
+    FirebaseAuth fauth;
+    FirebaseFirestore firebaseFirestore;
+    String userId;
 
 
     //to handle result of Camera/Gallery permissions in OnRequestPermissionResults
@@ -77,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
         scanbtn = findViewById(R.id.scanBtn);
         resultTV = findViewById(R.id.resultTV);
         scanline = findViewById(R.id.scanline);
+
+        fauth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
 
         //initialize the arrays of permissions required to pick image from gallery
@@ -270,6 +283,43 @@ public class MainActivity extends AppCompatActivity {
                     resultTV.setText("raw Value: "+rawValue);
                 }
             }
+
+           String newScannedData = resultTV.getText().toString();
+
+            userId=fauth.getCurrentUser().getUid();
+            DocumentReference documentReference =firebaseFirestore.collection("users").document(userId);
+            documentReference.get().addOnCompleteListener(task -> {
+
+                if (task.isSuccessful()){
+                    DocumentSnapshot document =task.getResult();
+                    if (document.exists()){
+
+                        // Retrieve the existing scanned data array
+                        ArrayList<Object> previousData = (ArrayList<Object>) document.get("scanned");
+
+                        // Add the new input to the scanned data array
+                        previousData.add(newScannedData);
+
+                        // Update the scanned data array in the Firestore document
+                        documentReference.update("scanned",previousData)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Log.d(TAG, "onSuccess: Data stored Successfully: "+ newScannedData);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d(TAG, "onFailure: "+ e.toString());
+                                    }
+                                });
+                    }
+                }
+
+            });
+
+
+
         }
     }
 
