@@ -33,12 +33,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GenerateQrScanner"
-            android:exported="false" />
-        <activity
-            android:name=".QrScanner"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="false" />
     </application>

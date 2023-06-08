@@ -22,6 +22,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,12 +42,13 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-//    Button qrGenerateBtn, qrbtn;
-//    TextView qrtext;
 
-    private MaterialButton cameraBtn,galleryBtn,scanbtn;
-    private ImageView imageIv;
+
+
+    private ImageButton cameraBtn, galleryBtn, scanbtn;
+    private ImageView imageIv,scanline;
     private TextView resultTV;
+
 
     //to handle result of Camera/Gallery permissions in OnRequestPermissionResults
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -74,8 +76,7 @@ public class MainActivity extends AppCompatActivity {
         imageIv = findViewById(R.id.imageiv);
         scanbtn = findViewById(R.id.scanBtn);
         resultTV = findViewById(R.id.resultTV);
-
-
+        scanline = findViewById(R.id.scanline);
 
 
         //initialize the arrays of permissions required to pick image from gallery
@@ -96,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (checkCameraPermission()){
+                    imageIv.setVisibility(View.VISIBLE);
+                    scanline.setVisibility(View.VISIBLE);
+                    resultTV.setVisibility(View.GONE);
                     pickImageCamera();
                 }
                 else{
@@ -109,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (checkStoragePermission()){
+                    imageIv.setVisibility(View.VISIBLE);
+                    scanline.setVisibility(View.VISIBLE);
+                    resultTV.setVisibility(View.GONE);
                     pickImageGallery();
                 }
                 else{
@@ -190,6 +197,9 @@ public class MainActivity extends AppCompatActivity {
             String rawValue = barcode.getRawValue();
             Log.d(TAG,"extractBarCodeQRCodeInfo: rawValue"+ rawValue);
 
+            imageIv.setVisibility(View.GONE);
+            scanline.setVisibility(View.GONE);
+            resultTV.setVisibility(View.VISIBLE);
 
             int valueType=barcode.getValueType();
 
