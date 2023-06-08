@@ -5,6 +5,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -34,7 +35,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
@@ -53,11 +56,12 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageButton cameraBtn, galleryBtn, scanbtn;
     private ImageView imageIv,scanline;
-    private TextView resultTV;
+    private TextView resultTV,scanMeUsername;
 
     FirebaseAuth fauth;
     FirebaseFirestore firebaseFirestore;
     String userId;
+    DocumentReference documentReference;
 
 
     //to handle result of Camera/Gallery permissions in OnRequestPermissionResults
@@ -80,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
 
         cameraBtn= findViewById(R.id.camerabtn);
         galleryBtn= findViewById(R.id.galleryBtn);
@@ -87,9 +92,27 @@ public class MainActivity extends AppCompatActivity {
         scanbtn = findViewById(R.id.scanBtn);
         resultTV = findViewById(R.id.resultTV);
         scanline = findViewById(R.id.scanline);
+        scanMeUsername = findViewById(R.id.scanMeUsername);
 
         fauth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+
+
+        //retrieving firestore data: username
+        userId=fauth.getCurrentUser().getUid();
+         documentReference =firebaseFirestore.collection("users").document(userId);
+         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+             @Override
+             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                 if(value!=null && value.exists()){
+                     String name = value.getString("username");
+                     String greeting = "Hi! " + name;
+                     scanMeUsername.setText(greeting);
+                 }
+
+
+             }
+         });
 
 
         //initialize the arrays of permissions required to pick image from gallery
@@ -152,27 +175,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-//        qrGenerateBtn = findViewById(R.id.qrGenerateBtn);
-//        qrbtn = findViewById(R.id.qrBtn);
-//        qrtext = findViewById(R.id.qrText);
-//
-//        qrGenerateBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(MainActivity.this,GenerateQrScanner.class);
-//                startActivity(i);
-//            }
-//        });
-//
-//        qrbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i= new Intent(MainActivity.this,QrScanner.class);
-//                startActivity(i);
-//
-//            }
-//        });
     }
 
     private void detectResultFromImage() {
@@ -286,8 +288,6 @@ public class MainActivity extends AppCompatActivity {
 
            String newScannedData = resultTV.getText().toString();
 
-            userId=fauth.getCurrentUser().getUid();
-            DocumentReference documentReference =firebaseFirestore.collection("users").document(userId);
             documentReference.get().addOnCompleteListener(task -> {
 
                 if (task.isSuccessful()){
@@ -317,6 +317,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             });
+
+
 
 
 
@@ -455,5 +457,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
+    }
+
+    public void history(View view) {
+        Intent intent = new Intent(this,HistoryActivity.class);
+        startActivity(intent);
     }
 }
