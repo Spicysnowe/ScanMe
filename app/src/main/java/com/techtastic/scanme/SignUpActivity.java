@@ -22,7 +22,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -87,6 +89,9 @@ public class SignUpActivity extends AppCompatActivity {
                             DocumentReference documentReference =firebaseFirestore.collection("users").document(userId);
                             Map<String,Object> user = new HashMap<>();
                             user.put("username",username);
+                            user.put("password", password);
+                            user.put("scanned", new ArrayList<>());
+
                             documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
@@ -98,6 +103,8 @@ public class SignUpActivity extends AppCompatActivity {
                                     Log.d(TAG, "onFailure: "+ e.toString());
                                 }
                             });
+
+
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
 
                         }else{

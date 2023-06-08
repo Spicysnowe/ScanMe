@@ -100,21 +100,21 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@drawable/top_curved_card"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/top_curved_card">
 
 
         <TextView
             android:id="@+id/tv1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Scan your QR"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="30sp"
             android:layout_alignParentStart="true"
             android:layout_marginStart="15sp"
-            android:layout_marginTop="20sp"/>
+            android:layout_marginTop="20sp"
+            android:text="Scan your QR"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -131,13 +131,13 @@
             android:id="@+id/scanBtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:scaleType="fitCenter"
-            android:padding="10dp"
-            android:src="@drawable/icon_scan"
-            android:background="@drawable/circular_image_button"
-            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="25sp"/>
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="25sp"
+            android:background="@drawable/circular_image_button"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_scan" />
 
         <ImageButton
             android:id="@+id/camerabtn"

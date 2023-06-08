@@ -343,6 +343,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG,"onActivityResult: imageUri: " + imageUri);
 
                         imageIv.setImageURI(imageUri);
+
                     }
                     else{
                         Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
